@@ -1,0 +1,38 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: check-yaml
+  - repo: local
+    hooks:
+      - id: gofmt
+        name: "go fmt"
+        entry: scripts/ci/gofmt.sh
+        language: script
+        description: "Runs `go fmt ./...` on the current working directory, requires golang"
+      - id: govet
+        name: "go vet"
+        entry: scripts/ci/govet.sh
+        language: script
+        description: "Runs `go vet ./...` on the current working directory, requires golang"
+      - id: security
+        name: "security-sast"
+        language: script
+        entry: scripts/ci/sec.sh
+      - id: staticcheck
+        name: "static checks"
+        language: script
+        entry: scripts/ci/gostatic.sh
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.10
+    hooks:
+      - id: insert-license
+        name: Add license for all .go files
+        files: \.go$
+        exclude: ^\.gitlab/.*$/
+        args:
+          - --comment-style
+          - "/*||*/"
+          - --license-filepath
+          - license-templates/LICENSE.txt
+          - --fuzzy-match-generates-todo
