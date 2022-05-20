@@ -15,10 +15,6 @@ repos:
         entry: scripts/ci/govet.sh
         language: script
         description: "Runs `go vet ./...` on the current working directory, requires golang"
-      - id: security
-        name: "security-sast"
-        language: script
-        entry: scripts/ci/sec.sh
       - id: staticcheck
         name: "static checks"
         language: script

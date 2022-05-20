@@ -44,3 +44,6 @@ clean:
 	rm -f coverage.out
 
 ci: test static-analysis clean local-pg sast-scanning
+
+check:
+	pre-commit run
