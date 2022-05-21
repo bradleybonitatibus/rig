@@ -154,3 +154,55 @@ func TestCount(t *testing.T) {
 		t.Errorf("expected count of 2, got %v instead", sc)
 	}
 }
+
+func TestCountIf(t *testing.T) {
+	evens := []int64{-4, 2, 3, 15, 12, 144}
+	isEven := func(x int64) bool {
+		return x%2 == 0
+	}
+
+	countEvens := CountIf(evens, isEven)
+	if countEvens != 4 {
+		t.Errorf("expected 4 evens, got %v instead", countEvens)
+	}
+	type test struct {
+		k string
+		v int64
+	}
+	tests := []test{
+		{
+			k: "user_id_1",
+			v: 1234,
+		},
+		{
+			k: "user_id_1",
+			v: 9999,
+		},
+		{
+			k: "user_id_2",
+			v: 12312312,
+		},
+	}
+
+	countUserID1 := CountIf(tests, func(x test) bool {
+		return x.k == "user_id_1"
+	})
+	if countUserID1 != 2 {
+		t.Errorf("expected count user ID 1 to be 2 got %v instead", countUserID1)
+	}
+}
+
+func TestGroupBy(t *testing.T) {
+	stringsValues := []string{
+		"hello",
+		"another",
+		"hello",
+		"string",
+		"hello",
+	}
+
+	sm := GroupBy(stringsValues)
+	if len(sm) != 3 || sm["hello"] != 3 || sm["another"] != 1 || sm["string"] != 1 {
+		t.Errorf("failed to group by with string map: %v", sm)
+	}
+}

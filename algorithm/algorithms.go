@@ -30,11 +30,29 @@ func ForEach[T any](elements []T, f func(T)) {
 }
 
 func Count[T comparable](elements []T, value T) int64 {
-	count := int64(0)
+	var count int64 = 0
 	for _, v := range elements {
 		if v == value {
 			count++
 		}
 	}
 	return count
+}
+
+func CountIf[T any](elements []T, pred func(T) bool) int64 {
+	var c int64 = 0
+	for _, v := range elements {
+		if pred(v) {
+			c++
+		}
+	}
+	return c
+}
+
+func GroupBy[T comparable](elements []T) map[T]int64 {
+	m := make(map[T]int64)
+	for _, v := range elements {
+		m[v]+=1
+	}
+	return m
 }
