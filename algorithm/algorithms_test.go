@@ -206,3 +206,11 @@ func TestGroupBy(t *testing.T) {
 		t.Errorf("failed to group by with string map: %v", sm)
 	}
 }
+
+func TestUniqueCopy(t *testing.T) {
+	v := []int64{1, 1, 1, 2, 2, 3, 4, 5}
+	uniqueV := UniqueCopy(v)
+	if len(uniqueV) != 5 {
+		t.Errorf("expected 5 unique values, got %v instead", uniqueV)
+	}
+}

@@ -67,3 +67,16 @@ func GroupBy[T comparable](elements []T) map[T]int64 {
 	}
 	return m
 }
+
+// UniqueCopy returns a copy of unique items in elements.
+func UniqueCopy[T comparable](elements []T) []T {
+	m := map[T]struct{}{}
+	out := make([]T, 0, len(elements))
+	for _, v := range elements {
+		if _, ok := m[v]; !ok {
+			out = append(out, v)
+			m[v] = struct{}{}
+		}
+	}
+	return out
+}
