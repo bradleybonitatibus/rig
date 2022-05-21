@@ -1,4 +1,27 @@
+/*
+Copyright 2022 Bradley Bonitatibus
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package algorithm
+
+// Ordered is the interface containing all the types that implement ordering.
+type Ordered interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 |
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
+		~float32 | ~float64 | ~string
+}
 
 // AllOf is a function to check if all elements satisfy a condition.
 func AllOf[T any](elements []T, pred func(T) bool) bool {
@@ -79,4 +102,89 @@ func UniqueCopy[T comparable](elements []T) []T {
 		}
 	}
 	return out
+}
+
+// LinearSearch iterates through all the values and checks if the value of
+// x is within the slice of values. If the value exists, it will return
+// the index at which the value is contained.
+func LinearSearch[T comparable](values []T, x T) int {
+	for i, v := range values {
+		if x == v {
+			return i
+		}
+	}
+	return -1
+}
+
+// BinarySearch searches a slices for a value using binary search.
+// This function will return the index of the element, or -1 if the value
+// is not found.
+func BinarySearch[T Ordered](values []T, x T) int {
+	if len(values) == 0 {
+		return -1
+	}
+
+	low := 0
+	high := len(values) - 1
+
+	for low <= high {
+		mid := (low + high) / 2
+		if values[mid] == x {
+			return mid
+		}
+		if values[mid] > x {
+			high = mid - 1
+		} else {
+			low = mid + 1
+		}
+	}
+	return -1
+}
+
+// MergeSort is a generic implementation of the merge sort algorithm.
+func MergeSort[T Ordered](items []T) []T {
+	num := len(items)
+
+	if num == 1 {
+		return items
+	}
+	mid := int(num / 2)
+
+	left := make([]T, mid)
+	right := make([]T, num-mid)
+
+	for i := 0; i < num; i++ {
+		if i < mid {
+			left[i] = items[i]
+		} else {
+			right[i-mid] = items[i]
+		}
+	}
+	return merge(MergeSort(left), MergeSort(right))
+}
+
+func merge[T Ordered](left, right []T) []T {
+	result := make([]T, len(left)+len(right))
+	i := 0
+
+	for len(left) > 0 && len(right) > 0 {
+		if left[0] < right[0] {
+			result[i] = left[0]
+			left = left[1:]
+		} else {
+			result[i] = right[0]
+			right = right[1:]
+		}
+		i++
+	}
+
+	for j := 0; j < len(left); j++ {
+		result[i] = left[j]
+		i++
+	}
+	for j := 0; j < len(right); j++ {
+		result[i] = right[j]
+		i++
+	}
+	return result
 }

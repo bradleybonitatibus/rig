@@ -1,6 +1,24 @@
+/*
+Copyright 2022 Bradley Bonitatibus
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package algorithm
 
 import (
+	"math"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -213,4 +231,48 @@ func TestUniqueCopy(t *testing.T) {
 	if len(uniqueV) != 5 {
 		t.Errorf("expected 5 unique values, got %v instead", uniqueV)
 	}
+}
+
+func TestLinearSearch(t *testing.T) {
+	if LinearSearch([]string{"a", "b", "c"}, "c") != 2 {
+		t.Error("linear search failed to return correct index")
+	}
+
+	if LinearSearch([]int32{1, 2, 4, 5}, 3) != -1 {
+		t.Error("linear search failed to return -1 when value did not exist")
+	}
+}
+
+func TestBinarySearch(t *testing.T) {
+	if x := BinarySearch([]int32{
+		1, 3, 5, 7, 9, 12, 15, 19, 25,
+	}, 3); x != 1 {
+		t.Errorf("expected 1 got %v", x)
+	}
+
+	if x := BinarySearch([]int64{
+		2, 4, 5, 9, 12, 23, 50, 1023,
+	}, 29); x != -1 {
+		t.Errorf("expected -1, got %v instead", x)
+	}
+
+	if x := BinarySearch([]float64{}, 10); x != -1 {
+		t.Errorf("expected -1, got %v instead", x)
+	}
+}
+
+func TestMergeSort(t *testing.T) {
+	data := [...]int{-15, 2, 13, -20, -32, 23, 53, 102, -13}
+	x := sort.IntSlice(data[0:])
+	x = MergeSort(x)
+	if !sort.IsSorted(x) {
+		t.Error("failed to sort data")
+	}
+	floats := [...]float64{-12351.2, 123.30, 9923.2, -2300.5, math.Inf(-1)}
+	y := sort.Float64Slice(floats[0:])
+	y = MergeSort(y)
+	if !sort.IsSorted(y) {
+		t.Error("failed to sort floats")
+	}
+
 }
