@@ -37,7 +37,7 @@ test:
 	POSTGRES_PASSWORD=postgres \
 	POSTGRES_DB=postgres \
 	POSTGRES_PORT=5432 \
-	go test ./... -coverprofile=coverage.out
+	go test -v ./... -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 
 clean:
