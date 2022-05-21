@@ -22,3 +22,19 @@ func AnyOf[T any](elements []T, pred func(T) bool) bool {
 func NoneOf[T any](elements []T, pred func(T) bool) bool {
 	return !AnyOf(elements, pred)
 }
+
+func ForEach[T any](elements []T, f func(T)) {
+	for _, v := range elements {
+		f(v)
+	}
+}
+
+func Count[T comparable](elements []T, value T) int64 {
+	count := int64(0)
+	for _, v := range elements {
+		if v == value {
+			count++
+		}
+	}
+	return count
+}

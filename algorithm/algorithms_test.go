@@ -123,3 +123,34 @@ func TestNoneOf(t *testing.T) {
 		t.Error("expected NoneOf to be falsy when all test.k are not length 3")
 	}
 }
+
+func TestForEach(t *testing.T) {
+	s := []string{"some", "exciting", "values"}
+	builder := strings.Builder{}
+
+	f := func(s string) {
+		builder.Write([]byte(s))
+	}
+
+	ForEach(s, f)
+
+	if builder.String() != "someexcitingvalues" {
+		t.Errorf("expected 'someexcitingvalues' got %v instead", builder.String())
+	}
+}
+
+func TestCount(t *testing.T) {
+	v := []int32{1, 2, 2, 5, 2, 19, 2}
+
+	c := Count(v, 2)
+	if c != 4 {
+		t.Errorf("expected 4, got %v instead", c)
+	}
+
+	s := []string{"h", "e", "h", "l"}
+	sc := Count(s, "h")
+
+	if sc != 2 {
+		t.Errorf("expected count of 2, got %v instead", sc)
+	}
+}
