@@ -16,10 +16,6 @@
 
 package slices
 
-import (
-	"golang.org/x/exp/constraints"
-)
-
 // LinearSearch iterates through all the values and checks if the value of
 // x is within the slice of values. If the value exists, it will return
 // the index at which the value is contained.
@@ -35,7 +31,7 @@ func LinearSearch[T comparable](values []T, x T) int {
 // BinarySearch searches a slices for a value using binary search.
 // This function will return the index of the element, or -1 if the value
 // is not found.
-func BinarySearch[T constraints.Ordered](values []T, x T) int {
+func BinarySearch[T Ordered](values []T, x T) int {
 	if len(values) == 0 {
 		return -1
 	}

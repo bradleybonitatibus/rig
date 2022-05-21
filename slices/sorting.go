@@ -1,11 +1,7 @@
 package slices
 
-import (
-	"golang.org/x/exp/constraints"
-)
-
 // MergeSort is a generic implementation of the merge sort algorithm.
-func MergeSort[T constraints.Ordered](items []T) []T {
+func MergeSort[T Ordered](items []T) []T {
 	num := len(items)
 
 	if num == 1 {
@@ -26,7 +22,7 @@ func MergeSort[T constraints.Ordered](items []T) []T {
 	return merge(MergeSort(left), MergeSort(right))
 }
 
-func merge[T constraints.Ordered](left, right []T) []T {
+func merge[T Ordered](left, right []T) []T {
 	result := make([]T, len(left)+len(right))
 	i := 0
 
