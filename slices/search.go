@@ -32,6 +32,9 @@ func LinearSearch[T comparable](values []T, x T) int {
 	return -1
 }
 
+// BinarySearch searches a slices for a value using binary search.
+// This function will return the index of the element, or -1 if the value
+// is not found.
 func BinarySearch[T constraints.Ordered](values []T, x T) int {
 	if len(values) == 0 {
 		return -1
