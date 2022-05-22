@@ -17,41 +17,40 @@ limitations under the License.
 package containers
 
 import (
-	"errors"
 	"testing"
 )
 
 func TestNewStack(t *testing.T) {
 	s := NewStack[int64](10)
-	if _, err := s.Peek(); err == nil {
-		t.Errorf("expected stack.Peek on empty stack to return empty stack error, got %v instead", err)
+	if _, ok := s.Peek(); ok {
+		t.Errorf("expected stack.Peek on empty stack to return empty stack error, got %v instead", ok)
 	}
 	for i := 1; i <= 10; i++ {
-		err := s.Push(int64(i))
-		if err != nil {
-			t.Error(err)
+		ok := s.Push(int64(i))
+		if !ok {
+			t.Error("failed to push to stack")
 		}
 	}
-	v, err := s.Peek()
-	if v != 10 || err != nil {
-		t.Errorf("expected stack.Peek to return value 10, got %v instead and err = %v", v, err)
+	v, ok := s.Peek()
+	if v != 10 || !ok {
+		t.Errorf("expected stack.Peek to return value 10, got %v instead and ok = %v", v, ok)
 	}
 	if !s.IsFull() || s.Size() != 10 {
 		t.Errorf("expected stack of capacity 10 to be full, have size %v", s.Size())
 	}
 
-	err = s.Push(11)
-	if !errors.Is(err, ErrStackFull) {
-		t.Errorf("expected error capacity limit reached, got %v instead", err)
+	ok = s.Push(11)
+	if ok {
+		t.Errorf("expected false, got %v instead", ok)
 	}
 	for i := 10; i > 0; i-- {
-		v, err := s.Pop()
-		if v != int64(i) || err != nil {
-			t.Errorf("expected %v got %v instead with err=%v", i, v, err)
+		v, ok := s.Pop()
+		if v != int64(i) || !ok {
+			t.Errorf("expected %v got %v instead with ok=%v", i, v, ok)
 		}
 	}
-	_, err = s.Pop()
-	if err != ErrEmptyStack {
-		t.Errorf("expected empty stack, got %v instead", err)
+	_, ok = s.Pop()
+	if ok {
+		t.Errorf("expected false got %v instead", ok)
 	}
 }

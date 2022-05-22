@@ -17,16 +17,7 @@ limitations under the License.
 package containers
 
 import (
-	"errors"
 	"sync"
-)
-
-var (
-	// ErrStackFull is an error to flag that the stack has become full.
-	ErrStackFull = errors.New("stack has reached full capacity")
-
-	// ErrEmptyStack is returned when stack.Pop is called with no values.
-	ErrEmptyStack = errors.New("stack is empty")
 )
 
 // Stack data structure implementation that is thread safe.
@@ -48,42 +39,42 @@ func NewStack[T any](capacity int) *Stack[T] {
 }
 
 // Pop returns the top value in the stack, or an error if the stack is empty.
-func (s *Stack[T]) Pop() (T, error) {
+func (s *Stack[T]) Pop() (T, bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.IsEmpty() {
 		var empty T
-		return empty, ErrEmptyStack
+		return empty, false
 	}
 	last := s.values[len(s.values)-1]
 	s.values = s.values[:len(s.values)-1]
 	s.size--
-	return last, nil
+	return last, true
 }
 
 // Push an item to the top of the stack. If the stack has reached it's capacity,
 // it will return ErrStackFull.
-func (s *Stack[T]) Push(item T) error {
+func (s *Stack[T]) Push(item T) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.IsFull() {
-		return ErrStackFull
+		return false
 	}
 	s.size++
 	s.values = append(s.values, item)
-	return nil
+	return true
 }
 
 // Peek returns the value at the top of the stack. If the stack is empty,
-// it will return the "default" value of type T, and ErrEmptyStack.
-func (s *Stack[T]) Peek() (T, error) {
+// it will return the "default" value of type T, and false.
+func (s *Stack[T]) Peek() (T, bool) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	if s.IsEmpty() {
 		var empty T
-		return empty, ErrEmptyStack
+		return empty, false
 	}
-	return s.values[len(s.values)-1], nil
+	return s.values[len(s.values)-1], true
 }
 
 // IsEmpty returns true when the stack does not contain any values.
