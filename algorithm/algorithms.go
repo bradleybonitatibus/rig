@@ -116,7 +116,7 @@ func LinearSearch[T comparable](values []T, x T) int {
 	return -1
 }
 
-// BinarySearch searches a slices for a value using binary search.
+// BinarySearch searches a sorted slice for a value using binary search.
 // This function will return the index of the element, or -1 if the value
 // is not found.
 func BinarySearch[T Ordered](values []T, x T) int {
@@ -163,6 +163,7 @@ func MergeSort[T Ordered](items []T) []T {
 	return merge(MergeSort(left), MergeSort(right))
 }
 
+// merge is the helper to merge two ordered slices for MergeSort.
 func merge[T Ordered](left, right []T) []T {
 	result := make([]T, len(left)+len(right))
 	i := 0
@@ -187,4 +188,30 @@ func merge[T Ordered](left, right []T) []T {
 		i++
 	}
 	return result
+}
+
+// FindIf iterates through elements and returns the first element to satisfy
+// the condition `pred`. If none of the items satisfy `pred`, this function
+// will return the default value of type T.
+func FindIf[T comparable](elements []T, pred func(T) bool) T {
+	var empty T
+	for _, v := range elements {
+		if pred(v) {
+			return v
+		}
+	}
+	return empty
+}
+
+// FindIfNot finds the first element to not satisfy the condition `pred`.
+// If all elements satisfy the condition, this function will return the default
+// value of type T.
+func FindIfNot[T comparable](elements []T, pred func(T) bool) T {
+	var empty T
+	for _, v := range elements {
+		if !pred(v) {
+			return v
+		}
+	}
+	return empty
 }

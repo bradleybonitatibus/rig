@@ -274,5 +274,67 @@ func TestMergeSort(t *testing.T) {
 	if !sort.IsSorted(y) {
 		t.Error("failed to sort floats")
 	}
+}
 
+func TestFindIf(t *testing.T) {
+	data := []string{"alice", "bob", "charlie", "brad"}
+	startsWithB := func(s string) bool {
+		return strings.HasPrefix(s, "b")
+	}
+
+	if e := FindIf(data, startsWithB); e != "bob" {
+		t.Errorf("expected bob, got %v instead", e)
+	}
+
+	type user struct {
+		name             string
+		past3monthsSpend float64 // floats for sales, smh >:(
+	}
+
+	users := []user{
+		{
+			name:             "alice",
+			past3monthsSpend: 53.12,
+		},
+		{
+			name:             "bob",
+			past3monthsSpend: 12.21,
+		},
+		{
+			name:             "charlie",
+			past3monthsSpend: 26.00,
+		},
+	}
+	spentMoreThan20Dollars := func(u user) bool {
+		return u.past3monthsSpend > 20.00
+	}
+
+	if u := FindIf(users, spentMoreThan20Dollars); u.name != "alice" {
+		t.Errorf("expected to find alice first, got %v instead", u.name)
+	}
+
+	allOdds := []int64{1, 3, 5, 7}
+	isEven := func(x int64) bool {
+		return x%2 == 0
+	}
+	if x := FindIf(allOdds, isEven); x != 0 {
+		t.Errorf("expected to not find any values, and get the default int64 value back, got %v instead", x)
+	}
+}
+
+func TestFindIfNot(t *testing.T) {
+	data := []int{2, 4, 6, 8, 9}
+	isEven := func(x int) bool {
+		return x%2 == 0
+	}
+	if x := FindIfNot(data, isEven); x != 9 {
+		t.Errorf("expected to retrieve 9 from data, got %v instead", x)
+	}
+	stringsData := []string{"Hello", "Titlecase", "Words"}
+
+	if y := FindIfNot(stringsData, func(s string) bool {
+		return strings.ToTitle(s) != s
+	}); y != "" {
+		t.Errorf("expected empty string to be returned got %v instead", y)
+	}
 }
