@@ -43,7 +43,7 @@ test:
 clean:
 	rm -f coverage.out
 
-ci: test static-analysis clean local-pg sast-scanning
+ci: clean local-pg static-analysis sast-scanning test
 
 check:
 	pre-commit run
