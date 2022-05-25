@@ -1,0 +1,43 @@
+/*
+Copyright 2022 Bradley Bonitatibus
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package generator
+
+type Iterator[T any] func() T
+
+type Generator[T any] struct {
+	fn   Iterator[T]
+	size int
+}
+
+func New[T any](size int, fn Iterator[T]) *Generator[T] {
+	return &Generator[T]{
+		fn:   fn,
+		size: size,
+	}
+}
+
+func (g *Generator[T]) Iter() <-chan T {
+	c := make(chan T)
+
+	go func() {
+		defer close(c)
+		for i := 0; i < g.size; i++ {
+			c <- g.fn()
+		}
+	}()
+	return c
+}
