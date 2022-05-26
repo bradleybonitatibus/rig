@@ -16,20 +16,28 @@ limitations under the License.
 
 package generator
 
-type Iterator[T any] func() T
+// GeneratorFn is a generic function to returns a value of type T.
+type GeneratorFn[T any] func() T
 
+// Generator is a concept that will allow users to define a function to return
+// values of type T for a specified size amount.
 type Generator[T any] struct {
-	fn   Iterator[T]
+	fn   GeneratorFn[T]
 	size int
 }
 
-func New[T any](size int, fn Iterator[T]) *Generator[T] {
+// New is the factory method to create a new Generator. The number of values that
+// can be generated from this function is controlled by the size parameter.
+// fn is the function that returns a given value of type T.
+func New[T any](size int, fn GeneratorFn[T]) *Generator[T] {
 	return &Generator[T]{
 		fn:   fn,
 		size: size,
 	}
 }
 
+// Iter returns a read-only channel that will have values sent through it
+// from a separate go routine.
 func (g *Generator[T]) Iter() <-chan T {
 	c := make(chan T)
 
@@ -39,5 +47,6 @@ func (g *Generator[T]) Iter() <-chan T {
 			c <- g.fn()
 		}
 	}()
+
 	return c
 }
