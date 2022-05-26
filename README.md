@@ -11,7 +11,7 @@ Standard Template Library (`<algorithm.h>`).
 Currently only a `Stack` generics implementation exists, but hoping to expand
 to match something similar to the C++ containers defined in [`absl`](https://github.com/abseil/abseil-cpp/tree/master/absl/container)
 
-* [`pg`](https://github.com/bradleybonitatibus/rig/tree/main/pg) has a postgres / `database/sql` connection struct
+* [`pg`](https://github.com/bradleybonitatibus/rig/tree/main/pg) has a `database/sql` connection struct
 and some database helpers specific to `postgres`.
 
 * [`utils`](https://github.com/bradleybonitatibus/rig/tree/main/utils) has miscellaneous utilities.
